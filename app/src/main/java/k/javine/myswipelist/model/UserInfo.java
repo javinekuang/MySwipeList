@@ -6,6 +6,7 @@ package k.javine.myswipelist.model;
 public class UserInfo {
     private long id;
     private String name;
+    private boolean isSelected;
 
     public UserInfo(long id, String name){
         this.id = id;
@@ -14,6 +15,14 @@ public class UserInfo {
 
     public UserInfo(){
 
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 
     public long getId() {

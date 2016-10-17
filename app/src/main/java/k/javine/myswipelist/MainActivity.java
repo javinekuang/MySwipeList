@@ -49,33 +49,5 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-/*        mAdapter = new MyAdapter(this,mDatas);
-        listView.setAdapter(mAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                listView.manipulate(new AnimationListView.Manipulator<MyAdapter>() {
-                    @Override
-                    public void manipulate(MyAdapter adapter) {
-                        mDatas.add(position,""+System.currentTimeMillis());
-                    }
-                });
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-                listView.manipulate(new AnimationListView.Manipulator<MyAdapter>() {
-                    @Override
-                    public void manipulate(MyAdapter adapter) {
-                        mDatas.remove(position);
-                    }
-                });
-                return true;
-            }
-        });*/
-
     }
 }

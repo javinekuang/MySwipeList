@@ -216,9 +216,9 @@ public class AnimationListView extends ListView {
         beforeVisible.clear();
         afterVisible.clear();
 
-        adapter.setMayNotify(false);
+        adapter.setMayNotify(false); //禁用listView更新界面  用户的adapter被AdapterWrapper代替，是否更新数据由AdapterWrapper管理
 
-        final int childCount = getChildCount();
+        final int childCount = getChildCount();//获取屏幕内的item数量
 
         final int firstVisiblePosition = getFirstVisiblePosition();
 
@@ -226,20 +226,20 @@ public class AnimationListView extends ListView {
             final View child = getChildAt(i);
             final long id = adapter.getItemId(firstVisiblePosition + i);
 
-            yMap.put(id, ViewHelper.getY(child));
-            positionMap.put(id, firstVisiblePosition + i);
+            yMap.put(id, ViewHelper.getY(child)); //保存屏幕内Item的Y坐标
+            positionMap.put(id, firstVisiblePosition + i);//保存屏幕内Item的position位置
         }
 
         for (int i = 0; i < firstVisiblePosition; i++) {
             final long id = adapter.getItemId(i);
-            beforeVisible.add(id);
+            beforeVisible.add(id); //保存第一个可见Item之前的Item的id值
         }
 
         final int count = adapter.getCount();
 
         for (int i = firstVisiblePosition + childCount; i < count; i++) {
             final long id = adapter.getItemId(i);
-            afterVisible.add(id);
+            afterVisible.add(id);  //保存最后一个可见Item之后的Item的id值
         }
 
     }
@@ -283,16 +283,16 @@ public class AnimationListView extends ListView {
         final int firstVisiblePosition = getFirstVisiblePosition();
         final int childCount = getChildCount();
 
-        for (final Iterator<Entry<Long, Float>> iter = yMap.entrySet().iterator(); iter.hasNext();) {
+        for (final Iterator<Entry<Long, Float>> iter = yMap.entrySet().iterator(); iter.hasNext();) { //遍历屏幕中的Item
             final Entry<Long, Float> entry = iter.next();
 
             final long id = entry.getKey();
-            final int oldPos = positionMap.get(id);
+            final int oldPos = positionMap.get(id); //之前的位置，界面上的位置
             final View child = getChildAt(oldPos - firstVisiblePosition);
-            final int newPos = getPositionForId(id);
+            final int newPos = getPositionForId(id);//数据中的位置，还未更新到界面上去
 
             // fade out items that disappear
-            if (newPos == -1) {
+            if (newPos == -1) { //在数据中查找不到位置，则启动隐藏动画
                 final ObjectAnimator anim = animateAlpha(child, false);
                 animatorSet.play(anim);
 
@@ -301,6 +301,7 @@ public class AnimationListView extends ListView {
                 continue;
             }
 
+            //将需要移出屏幕的Item，通过动画移出屏幕
             // translate items that move out of bounds
             if (newPos < firstVisiblePosition || newPos > firstVisiblePosition + childCount) {
                 final float offset;
@@ -311,7 +312,7 @@ public class AnimationListView extends ListView {
                     offset = getHeight();
                 }
 
-                final AnimatorProxy proxy = AnimatorProxy.wrap(child);
+                final AnimatorProxy proxy = AnimatorProxy.wrap(child);//why use proxy?
                 final ObjectAnimator anim = ObjectAnimator.ofFloat(proxy, "translationY", 0f,
                         offset);
 

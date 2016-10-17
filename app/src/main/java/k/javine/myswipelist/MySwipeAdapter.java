@@ -50,14 +50,14 @@ public class MySwipeAdapter extends BaseSwipeAdapter{
     }
 
     @Override
-    public View generateView(final int position, ViewGroup parent) {
+    public View generateView(int position, ViewGroup parent) {
         View convertView = LayoutInflater.from(context).inflate(R.layout.swipe_item,parent,false);
         final SwipeLayout swipeLayout = (SwipeLayout) convertView.findViewById(getSwipeLayoutResourceId(position));
         convertView.findViewById(R.id.id_trash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mItemManger.removeShownLayouts(swipeLayout);
-                deleteListener.onDeleteItem(position);
+                deleteListener.onDeleteItem((Integer) v.getTag());
                 mItemManger.closeAllItems();
             }
         });
@@ -66,6 +66,7 @@ public class MySwipeAdapter extends BaseSwipeAdapter{
 
     @Override
     public void fillValues(int position, View convertView) {
+        convertView.findViewById(R.id.id_trash).setTag(position);
         TextView tv = (TextView) convertView.findViewById(R.id.tv_data);
         tv.setText(userInfos.get(position).getName());
     }
