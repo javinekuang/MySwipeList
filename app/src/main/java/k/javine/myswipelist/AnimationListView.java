@@ -46,6 +46,7 @@ public class AnimationListView extends ListView {
         private final ListAdapter adapter;
         private boolean mayNotify = true;
 
+        //实例化一个observer，用来观察原adapter的数据变化
         private final DataSetObserver observer = new DataSetObserver() {
             @Override
             public void onChanged() {
@@ -62,7 +63,7 @@ public class AnimationListView extends ListView {
 
         public AdapterWrapper(final ListAdapter adapter) {
             this.adapter = adapter;
-
+            //将observer注册到原adapter中，以观察其数据变化
             adapter.registerDataSetObserver(observer);
         }
 
@@ -154,6 +155,7 @@ public class AnimationListView extends ListView {
         super.setAdapter(this.adapter);
     }
 
+    //处理动画
     public <T extends ListAdapter> void manipulate(final Manipulator<T> manipulator) {
         if (!animating) {
             prepareAnimation();
@@ -177,10 +179,10 @@ public class AnimationListView extends ListView {
 
     private void manipulatePending() {
 
-        if (!pendingManipulationsWithoutAnimation.isEmpty()) {
+        if (!pendingManipulationsWithoutAnimation.isEmpty()) {//有无动画的操作未执行
             animating = true;
             for (final Manipulator manipulator : pendingManipulationsWithoutAnimation) {
-                manipulator.manipulate(adapter.adapter);
+                manipulator.manipulate(adapter.adapter); // 将未执行的manipulator全部强制执行（无动画效果，只改变数据）
             }
             pendingManipulationsWithoutAnimation.clear();
             adapter.notifyDataSetChanged();
@@ -193,7 +195,7 @@ public class AnimationListView extends ListView {
                     manipulatePending();
                 }
             });
-        } else {
+        } else { //有带动画效果的操作未执行
 
             if (pendingManipulations.isEmpty()) {
                 return;
@@ -201,7 +203,7 @@ public class AnimationListView extends ListView {
 
             prepareAnimation();
 
-            for (final Manipulator manipulator : pendingManipulations) {
+            for (final Manipulator manipulator : pendingManipulations) { //将要变更的数据全部执行，然后一起执行动画
                 manipulator.manipulate(adapter.adapter);
             }
             pendingManipulations.clear();
